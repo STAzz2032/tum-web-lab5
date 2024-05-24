@@ -69,7 +69,7 @@ class Go2Web {
 
             int responseCode = connection.getResponseCode();
             if (responseCode == HttpURLConnection.HTTP_OK) {
-                System.out.println(responsecode);
+                System.out.println(responseCode);
                 BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 StringBuilder responseBuilder = new StringBuilder();
                 String line;
