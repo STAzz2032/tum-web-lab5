@@ -69,30 +69,20 @@ class Go2Web {
 
             int responseCode = connection.getResponseCode();
             if (responseCode == HttpURLConnection.HTTP_OK) {
-                System.out.println(responseCode);
                 BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 StringBuilder responseBuilder = new StringBuilder();
                 String line;
                 while ((line = reader.readLine()) != null) {
                     responseBuilder.append(line);
                 }
-               // String response = removeHtmlTags(responseBuilder.toString());
-               // System.out.println("Response from " + urlString + ":");
-                //System.out.println(response);
-                printSearchResults(responseBuilder.toString());
                 reader.close();
+                printSearchResults(responseBuilder.toString());
             } else {
                 System.err.println("Failed to make HTTP request. Response code: " + responseCode);
             }
         } catch (IOException e) {
             System.err.println("Error making HTTP request: " + e.getMessage());
         }
-    }
-
-    private String removeHtmlTags(String html) {
-        Pattern pattern = Pattern.compile("<[^>]*>");
-        Matcher matcher = pattern.matcher(html);
-        return matcher.replaceAll("");
     }
 
     public void searchOnWeb(String searchTerm) {
@@ -106,24 +96,30 @@ class Go2Web {
     }
 
     private static void printSearchResults(String response) {
+        Pattern pattern = Pattern.compile("<a href=\"/url\\?q=(https?://[^\"]+)&amp;");
+        Matcher matcher = pattern.matcher(response);
 
-        Scanner scanner = new Scanner(response);
         int count = 0;
-        while (scanner.hasNextLine()) {
-            String line = scanner.nextLine();
-            if (line.contains("/url?q=") && line.contains("href=\"/url?q=")) {
-                int startIndex = line.indexOf("/url?q=") + 7;
-                int endIndex = line.indexOf("&amp;", startIndex);
-                if (endIndex == -1) {
-                    endIndex = line.indexOf("\"", startIndex);
-                }
-                String link = line.substring(startIndex, endIndex);
+        while (matcher.find() && count < 10) {
+            String link = matcher.group(1);
+            link = cleanLink(link);
+            if (isValidLink(link)) {
                 System.out.println(++count + ". " + link);
             }
-            if (count == 10) {
-                break;
-            }
         }
-        scanner.close();
+    }
+
+    private static String cleanLink(String link) {
+        // Remove any trailing query parameters or fragments
+        int endIndex = link.indexOf('&');
+        if (endIndex != -1) {
+            link = link.substring(0, endIndex);
+        }
+        return link;
+    }
+
+    private static boolean isValidLink(String link) {
+        // Check if the link is not a Google internal link and is a valid web page link
+        return link.startsWith("https://") && !link.contains("google.com");
     }
 }
