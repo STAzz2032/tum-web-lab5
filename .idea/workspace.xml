@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a4404406-a345-4bda-a5fe-15db4512011c" name="Changes" comment="-Add lab5, search term task not done fully">
+    <list default="true" id="a4404406-a345-4bda-a5fe-15db4512011c" name="Changes" comment="-Add lab5, search term displays 10 link but it have ambiuity">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
     </list>
@@ -57,7 +57,7 @@
       <option name="presentableId" value="Default" />
       <updated>1716533944842</updated>
       <workItem from="1716533945885" duration="2845000" />
-      <workItem from="1716725849090" duration="763000" />
+      <workItem from="1716725849090" duration="2400000" />
     </task>
     <task id="LOCAL-00001" summary="-Add lab5, search term task not done fully">
       <option name="closed" value="true" />
@@ -75,7 +75,15 @@
       <option name="project" value="LOCAL" />
       <updated>1716536160786</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="-Add lab5, search term displays 10 link but it have ambiuity">
+      <option name="closed" value="true" />
+      <created>1716726803169</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1716726803169</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -83,6 +91,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="-Add lab5, search term task not done fully" />
-    <option name="LAST_COMMIT_MESSAGE" value="-Add lab5, search term task not done fully" />
+    <MESSAGE value="-Add lab5, search term displays 10 link but it have ambiuity" />
+    <option name="LAST_COMMIT_MESSAGE" value="-Add lab5, search term displays 10 link but it have ambiuity" />
   </component>
 </project>

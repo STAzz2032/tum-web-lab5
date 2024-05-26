@@ -4,7 +4,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.HashSet;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,11 +42,15 @@ public class Main {
             String url = args[1];
             go2Web.makeHTTPRequest(url);
         } else if (args[0].equals("-s")) {
-            if (args.length != 2) {
+            if (args.length < 2) {
                 System.err.println("Usage: go2web -s <search-term>");
                 return;
             }
-            String searchTerm = args[1];
+            StringBuilder searchTermBuilder = new StringBuilder();
+            for (int i = 1; i < args.length; i++) {
+                searchTermBuilder.append(args[i]).append(" ");
+            }
+            String searchTerm = searchTermBuilder.toString().trim();
             go2Web.searchOnWeb(searchTerm);
         } else {
             System.err.println("Invalid option. Use 'go2web -h' for help.");
@@ -88,7 +94,7 @@ class Go2Web {
     public void searchOnWeb(String searchTerm) {
         try {
             String encodedSearchTerm = URLEncoder.encode(searchTerm, "UTF-8");
-            String searchUrl = "https://www.google.com/search?q=" + encodedSearchTerm;
+            String searchUrl = "https://www.google.com/search?q=" + encodedSearchTerm.replace(" ", "%20");
             makeHTTPRequest(searchUrl);
         } catch (IOException e) {
             System.err.println("Error searching on the web: " + e.getMessage());
@@ -99,12 +105,16 @@ class Go2Web {
         Pattern pattern = Pattern.compile("<a href=\"/url\\?q=(https?://[^\"]+)&amp;");
         Matcher matcher = pattern.matcher(response);
 
+        Set<String> uniqueLinks = new HashSet<>();
         int count = 0;
         while (matcher.find() && count < 10) {
             String link = matcher.group(1);
             link = cleanLink(link);
             if (isValidLink(link)) {
-                System.out.println(++count + ". " + link);
+                String normalizedLink = normalizeLink(link);
+                if (uniqueLinks.add(normalizedLink)) {
+                    System.out.println(++count + ". " + link);
+                }
             }
         }
     }
@@ -115,7 +125,19 @@ class Go2Web {
         if (endIndex != -1) {
             link = link.substring(0, endIndex);
         }
+        // Remove trailing slashes
+        link = link.replaceAll("/$", "");
         return link;
+    }
+
+    private static String normalizeLink(String link) {
+        // Normalize the link to its base form
+        try {
+            URL url = new URL(link);
+            return url.getProtocol() + "://" + url.getHost() + url.getPath();
+        } catch (IOException e) {
+            return link;
+        }
     }
 
     private static boolean isValidLink(String link) {
